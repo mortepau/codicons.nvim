@@ -218,11 +218,11 @@ nerd-fonts
 
 ## Todo
 
-- [ ] Add documentation for vim, `doc/codicons.txt`
 - [ ] Document built-in extensions
-- [ ] Use `codicons.table` instead of hardcoded values in
-    `codicons.completion_item_kind`
 - [ ] Add tests
+- [x] Add documentation for vim, `doc/codicons.txt`
+- [x] Use `codicons.table` instead of hardcoded values in
+    `codicons.completion_item_kind`
 - [x] Add Code of Conduct
 - [x] Add License
 
