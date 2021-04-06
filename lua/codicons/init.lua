@@ -1,12 +1,4 @@
 local codicons = require('codicons.table')
---[[
-Reference for VS Code icon to codicon ID:
-  https://code.visualstudio.com/api/references/icons-in-labels
-Reference for unicode value:
-  https://github.com/microsoft/vscode-codicons/blob/main/dist/codicon.csv
-Reference for CompletionItemKind codicons
-  https://github.com/microsoft/vscode/blob/main/src/vs/editor/common/modes.ts#L400
---]]
 
 local M = {}
 
