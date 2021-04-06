@@ -83,11 +83,11 @@ icon = codicons.get(0xEA6B) -- ''
 icon = codicons.get('comment', 'icon') -- ''
 
 -- Get the unicode value instead
-local unicode = codicons.get('comment', 'id') -- 60011
+local unicode = codicons.get('comment', 'unicode') -- 60011
 
--- The name is returned instead if indexing using a numerical value
-local name = codicons.get(60011, 'id') -- 'comment'
-name = codicons.get(0xEA6B, 'id') -- 'comment'
+-- Or the name if indexing using a numerical value
+local name = codicons.get(60011, 'name') -- 'comment'
+name = codicons.get(0xEA6B, 'name') -- 'comment'
 
 -- 'full' returns the full codicon configuration
 local comment = codicons.get('comment', 'full') -- { icon = '', unicode = 60011 }
@@ -147,7 +147,8 @@ codicons.query('invalid') -- {}
 For both of these methods, the `retval` parameter has to be one of
 
 - `icon` - Codicon icon (`string`)
-- `id` - Codicon unique identifier (`number` or `string`)
+- `name` - Codicon name (`string`)
+- `unicode` - Codicon unicode value (`number`)
 - `full` - Full codicon configuration (`table`)
 
 ### Extensions
