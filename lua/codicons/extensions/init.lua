@@ -5,7 +5,7 @@ local base = 'codicons.extensions.'
 function M.available()
   return {
     CompletionItemKind = base .. 'completion_item_kind',
-    VsCodeIcons = base .. 'vs_code_icons',
+    VsCodeProductIcons = base .. 'vs_code_product_icons',
   }
 end
 
