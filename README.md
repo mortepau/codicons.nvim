@@ -1,7 +1,7 @@
 # codicons.nvim
 
 A small library containing the [codicons](https://microsoft.github.io/vscode-codicons/dist/codicon.html)
-from VS Code and some functions to ease the usage of them.
+from VS Code and some functions to simplify the usage of them.
 
 ## Table of Contents
 
