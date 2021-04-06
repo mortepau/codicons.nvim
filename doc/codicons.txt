@@ -38,7 +38,8 @@ the default configuration and your configuration differs. It also provides a
 set of functions for retrieving codicons.
 
 In addition to the basic functionality a set of extensions are available as
-well. For a full oveview of the availble extensions, see |codicons-extensions|.
+well. For a full oveview of the available extensions, see
+|codicons-extensions|.
 
 ------------------------------------------------------------------------------
 API                                                             *codicons-api*
