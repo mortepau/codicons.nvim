@@ -1,0 +1,313 @@
+*codicons.txt*                                     Neovim library for codicons
+*codicons.nvim*
+
+Author: Morten Paulsen <morten.p96@gmail.com>
+Homepage: <https://github.com/mortepau/codicons.nvim>
+License: MIT license
+
+==============================================================================
+CONTENTS                                                   *codicons-contents*
+
+Introduction                                           |codicons-introduction|
+Features                                                   |codicons-features|
+  API                                                           |codicons-api|
+Extensions                                               |codicons-extensions|
+    API                                              |codicons-extensions-api|
+    CompletionItemKind                         |codicons-completion_item_kind|
+    VsCodeIcons                                       |codicons-vs_code_icons|
+License                                                     |codicons-license|
+Bugs                                                           |codicons-bugs|
+Contributing                                           |codicons-contributing|
+Changelog                                                 |codicons-changelog|
+
+==============================================================================
+INTRODUCTION                                           *codicons-introduction*
+
+Library for working with VS Code codicons in Neovim. Additionally bundles a
+few extensions which provide some functionality used by many.
+
+==============================================================================
+FEATURES                                                   *codicons-features*
+
+The main functionality is provided through the codicons-module.
+>
+    local codicons = require('codicons')
+<
+This module contains the necessary functions for initializing the library if
+the default configuration and your configuration differs. It also provides a
+set of functions for retrieving codicons.
+
+In addition to the basic functionality a set of extensions are available as
+well. For a full oveview of the availble extensions, see |codicons-extensions|.
+
+------------------------------------------------------------------------------
+API                                                             *codicons-api*
+                                                          *codicons-functions*
+
+codicons.setup({override})                                  *codicons.setup()*
+                                                            *codicons-setup()*
+    Initialize the internal codicon library. {override} is a table with
+    codicons to override if the default configuration does not match your
+    configuration.
+
+    {override} has to be a table of codicon name to codicon unicode value,
+    codicon name to codicon icon, or codicon unicode to codicon name.
+
+    Example:
+>
+    local codicons = require('codicons')
+
+    codicons.setup({
+        -- Map name to icon
+        ['account'] = '',
+        -- Map name to unicode value
+        ['comment'] = 0xEA6B,
+
+        -- Map unicode value to name
+        [60056] = 'archive'
+    })
+<
+
+The codicon plugin provide a couple of functions to get a single or multiple
+codicons either by identifier or unicode value.
+
+codicons.get({identifier}, {retval})                         *codicons.get()*
+                                                             *codicons-get()*
+    Get a single codicon defined by {identifier} and returns a value based on
+    {retval}. If the {identifier} doesn't match any existing codicon, nil is
+    returned.
+
+    {identifier} can be a string or a numerical value, so both `'account'`
+    and `0xEB99`will result in the same codicon.
+
+    {retval} has to be one of the following values:
+        icon: Return the codicon icon
+        name: Return the codicon name, only works for numerical {identfier}.
+              Raises an error if used with a string {identifier}.
+        unicode: Return the codicon unicode value, only works for string
+                 {identifier}. Raises an error if used with numerical
+                 {identifier}.
+        full: Return the full codicon configuration.
+    {retval} defaults to icon.
+
+    Example:
+>
+    local codicons = require('codicons')
+
+    -- Multiple ways for retrieving an icon
+    local icon = codicons.get('comment') -- ''
+    icon = codicons.get(60011) -- ''
+    icon = codicons.get(0xEA6B) -- ''
+
+    -- Retrieve something other than the icon
+    local unicode = codicons.get('comment', 'unicode') -- 60011
+    local name = codicons.get(60011, 'name') -- 'comment'
+
+    -- Retrieve the full codicon configuration
+    local config = codicons.get('comment', 'full')
+    -- { icon = '', unicode = 60011 }
+
+    -- An invalid identifier returns nil
+    codicons.get('invalid') -- nil
+<
+
+codicons.query({pattern_range}, {retval})                  *codicons.query()*
+                                                           *codicons-query()*
+    Get all codicons matching {pattern_range} and returns values based on
+    {retval}. If {pattern_range} doesn't match any existing codicons, an empty
+    table is returned.
+
+    {pattern_range} can be a regex pattern or a table with two values. Any
+    regex pattern that vim recognises can be used. If {pattern_range} is a
+    range it has to be on the following form:
+>
+        { number, number }
+<
+    The first index is the lowest bound and the second index is the
+    upper bound. The range bounds are inclusive.
+
+    {retval} has to be one of the following values:
+        icon: Return the codicon icon
+        name: Return the codicon name, raises an error if used with a range as
+              {pattern_range}.
+        unicode: Return the unicode value, raises an error if used with a
+                 pattern as {pattern_range}.
+        full: Return the full codicon configuration.
+    {retval} defaults to icon.
+
+    Example:
+>
+    local codicons = require('codicons')
+
+    -- Query for all codicons with '^comment' at the start of the name
+    codicons.query('^comment')
+    -- {
+    --   ['comment'] = '',
+    --   ['comment-discussion'] = ''
+    -- }
+
+    -- Accepts the same retval's as get
+    codicons.query('^comment', 'unicode')
+    -- {
+    --   ['comment'] = 60011,
+    --   ['comment-discussion'] = 60103
+    -- }
+
+    codicons.query('^comment', 'full')
+    -- {
+    --   ['comment'] = { icon = '', unicode = 60011 },
+    --   ['comment-discussion'] = { icon = '', unicode = 60103 }
+    -- }
+
+    -- The use of a range instead
+    codicons.query({0xEA6E, 0xEA70})
+    -- {
+    --   [60014] = '',
+    --   [60015] = '',
+    --   [60016] = ''
+    -- }
+<
+
+==============================================================================
+EXTENSIONS                                               *codicons-extensions*
+
+An extension is a set of functions/tables providing additional functionality
+on top of the core library. All available extensions can be listed through
+|codicons-extensions-available()|.
+
+------------------------------------------------------------------------------
+API                                                  *codicons-extensions-api*
+
+codicons.extensions.available()              *codicons.extensions.available()*
+    List the available extensions. Returns a table of the extension names as
+    Lua modules.
+
+    Example:
+>
+    local extensions = require('codicons.extensions')
+
+    local available_exts = extensions.available()
+    -- {
+    --   CompletionItemKind = 'codicons.extensions.completion_item_kind',
+    --   VsCodeIcons = 'codicons.extension.vs_code_icons'
+    -- }
+
+    -- Load the CompletionItemKind extension
+    local cik = require(available_exts.CompletionItemKind)
+<
+
+------------------------------------------------------------------------------
+CompletionItemKind                             *codicons-completion_item_kind*
+
+An extension providing the possibility of adding codicons to the completion
+menu for |vim.lsp.protocol.CompletionItemKind|.
+
+FEATURES                              *codicons-completion_item_kind-features*
+
+* Add codicons to the CompletionItemKind table.
+* Configurable settings with possibility to include label and/or icon and
+  specify width of icons.
+* Stores the original table for later use.
+
+API                                        *codicons-completion_item_kind-api*
+
+completion_item_kind.set({opts})         *codicons-completion_item_kind-set()*
+                                         *codicons-completion_item_kind.set()*
+
+    This function modifies the CompletionItemKind table available at
+    |vim.lsp.protocol|. The new table is configured through the {opts} table.
+    The original CompletionItemKind table is stored in 
+
+    {opts} is a table with the following keys:
+
+    {include_icon}  - Include the codicon in the new label
+                      Default: `true`
+    {include_label} - Include the label text in the new label
+                      Default: `true`
+    {monospaced}    - Treat the codicons as monospaced.
+                      Default: `true`
+    {override}      - Table of label icons to override.
+                      Default: `nil`
+
+    Example:
+>
+    local cik = require('codicons.extensions.completion_item_kind')
+
+    cik.set({
+        include_icon = true, -- Include icons in label
+        include_label = true, -- Include label test in label
+        monospaced = false -- Treat icons as double-width symbols
+    })
+
+    -- Override the Function, Variable, and Keyword label
+    cik.set({
+        override = {
+            -- Through icon
+            ['Function'] = '',
+            -- Through codicon name
+            ['Variable'] = 'symbol-field',
+            -- Through unicode value
+            ['Keyword'] =  0xEA93,
+        }
+    })
+<
+
+completion_item_kind.reset()           *codicons-completion_item_kind-reset()*
+                                       *codicons-completion_item_kind.reset()*
+
+    Restore the CompletionItemKind to its initial state, aka. before the call
+    to |codicons.completion_item_kind.set()|. Has no effect if used before
+    |codicons.completion_item_kind.set()|.
+>
+    local cik = require('codicons.extensions.completion_item_kind')
+
+    -- Revert any changes to vim.lsp.protocol.CompletionItemKind
+    cik.reset()
+<
+
+------------------------------------------------------------------------------
+VsCodeIcons                                           *codicons-vs_code_icons*
+
+    TODO
+
+FEATURES                                     *codicons-vs_code_icons-features*
+
+    TODO
+
+API                                               *codicons-vs_code_icons-api*
+
+    TODO
+
+==============================================================================
+LICENSE                                                     *codicons-license*
+
+|codicons.nvim| is licensed under the MIT license.
+
+==============================================================================
+BUGS                                                           *codicons-bugs*
+
+If you find any bugs please report them on the issue tracker:
+https://github.com/mortepau/codicons.nvim/issues/
+
+==============================================================================
+CONTRIBUTING                                           *codicons-contributing*
+
+Want to help us make |codicons.nvim| better?
+
+Send a pull request or open an issue with your thoughts on the matter.
+https://github.com/mortepau/codicons.nvim/pulls/
+
+==============================================================================
+CHANGELOG                                                 *codicons-changelog*
+
+v0.1.0
+    * Basic functionality present.
+    * Documentation for basic functionality added.
+    * CompletionItemKind-extension almost complete.
+    * Added license
+    * Added CONTRIBUTING.md
+    * Added README.md
+    * Added CODE_OF_CONDUCT.md
+
+==============================================================================
+vim: tw=78:ts=8:ft=help:norl
