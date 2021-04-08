@@ -301,6 +301,9 @@ https://github.com/mortepau/codicons.nvim/pulls/
 ==============================================================================
 CHANGELOG                                                 *codicons-changelog*
 
+v0.2.0
+    * Add more codicons
+    * Add table of names for non-unique unicode values
 v0.1.0
     * Basic functionality present.
     * Documentation for basic functionality added.
