@@ -451,7 +451,15 @@ local codicons = {
 
 -- Add indexing by unicode value
 for name, config in pairs(vim.deepcopy(codicons)) do
-  codicons[config.unicode] = { name = name, icon = config.icon }
+  -- If it has a codicon defined for the unicode value, convert it to a list of names
+  if codicons[config.unicode] then
+    if type(codicons[config.unicode].name) ~= 'table' then
+      codicons[config.unicode].name = { codicons[config.unicode].name }
+    end
+    table.insert(codicons[config.unicode].name, name)
+  else
+    codicons[config.unicode] = { name = name, icon = config.icon }
+  end
 end
 
 return codicons
