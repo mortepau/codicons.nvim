@@ -141,7 +141,7 @@ local codicons = {
   ['file']                                    = { icon = '', unicode = 0xEA7B },
   ['file-add']                                = { icon = '', unicode = 0xEA7F },
   ['file-binary']                             = { icon = '', unicode = 0xEAE8 },
-  ['file-code']                               = { icon = '', unicode = 0xEAE9 }, -- ? Missing symbol
+  ['file-code']                               = { icon = '', unicode = 0xEAE9 },
   ['file-directory']                          = { icon = '', unicode = 0xEA83 },
   ['file-directory-create']                   = { icon = '', unicode = 0xEA80 },
   ['file-media']                              = { icon = '', unicode = 0xEAEA },
