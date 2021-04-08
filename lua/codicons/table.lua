@@ -1,6 +1,7 @@
 --[[
 Reference for unicode value:
   https://github.com/microsoft/vscode-codicons/blob/main/dist/codicon.csv
+  https://github.com/microsoft/vscode-codicons/blob/main/src/template/mapping.json
 --]]
 
 local codicons = {
