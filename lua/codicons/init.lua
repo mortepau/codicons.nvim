@@ -2,8 +2,8 @@ local codicons = require('codicons.table')
 
 local M = {}
 
----@alias retvalKey "'FULL'" | "'ICON'" | "'NAME'" | "'UNICODE'"
----@alias retval "'full'" | "'icon'" | "'name'" | "'unicode'"
+---@alias codiconRetvalKey "'FULL'" | "'ICON'" | "'NAME'" | "'UNICODE'"
+---@alias codiconRetval "'full'" | "'icon'" | "'name'" | "'unicode'"
 
 ---@alias pattern string
 
@@ -15,12 +15,12 @@ local M = {}
 
 ---@alias codiconUserConfig table<codiconConfigIdentifier, codiconConfigIdentifier>
 
----@alias codiconRetval codiconConfigIdentifier | codiconConfig
+---@alias codiconValue codiconConfigIdentifier | codiconConfig
 
----@alias codiconRetvalTable table<codiconConfigIdentifier, codiconRetval>
+---@alias codiconValueTable table<codiconConfigIdentifier, codiconValue>
 
 --- Table of allowed return values
----@type table<retvalKey, retval>
+---@type table<codiconRetvalKey, codiconRetval>
 local retvals = {
   FULL = 'full', -- Full configuration
   ICON = 'icon', -- Literal codicon icon
@@ -29,9 +29,9 @@ local retvals = {
 }
 
 --- Validate the return value
----@param retval retval|nil @The return value to validate
+---@param retval codiconRetval|nil @The return value to validate
 ---@param id_type type @The type of the identifier used in the public API
----@return retval @The validated return value
+---@return codiconRetval @The validated return value
 local function validate_retval(retval, id_type)
   -- Default to icon
   if not retval then
@@ -126,8 +126,8 @@ end
 
 --- Get a codicon by identifier
 ---@param identifier codiconConfigIdentifier @The identifier to find codicon by
----@param retval retval @The return value
----@return nil | codiconRetval @The found codicon value or nil if not found
+---@param retval codiconRetval @The return value
+---@return nil | codiconValue @The found codicon value or nil if not found
 function M.get(identifier, retval)
   -- Validate retval
   retval = validate_retval(retval, type(identifier))
@@ -145,8 +145,8 @@ end
 
 --- Get a table of codicons matching pattern_range
 ---@param pattern_range pattern_range @The query parameter
----@param retval retval @The return value
----@return codiconRetvalTable @Table of codicon configurations matching the query
+---@param retval codiconRetval @The return value
+---@return codiconValueTable @Table of codicon configurations matching the query
 function M.query(pattern_range, retval)
   -- Validate retval
   retval = validate_retval(retval, type(pattern_range))
