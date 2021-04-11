@@ -2,26 +2,36 @@ local codicons = require('codicons.table')
 
 local M = {}
 
+---@alias retvalKey "'FULL'" | "'ICON'" | "'NAME'" | "'UNICODE'"
+---@alias retval "'full'" | "'icon'" | "'name'" | "'unicode'"
+
+---@alias pattern string
+
+---@class range
+---@field 1 integer
+---@field 2 integer
+
+---@alias pattern_range pattern | range
+
+---@alias codiconUserConfig table<codiconConfigIdentifier, codiconConfigIdentifier>
+
+---@alias codiconRetval codiconConfigIdentifier | codiconConfig
+
+---@alias codiconRetvalTable table<codiconConfigIdentifier, codiconRetval>
+
 --- Table of allowed return values
---@field full Return the full codicon configuration
---@field icon Return only the codicon icon
---@field name Return only the codicon name
---@field unicode Return only the codicon unicode hexadecimal value
---@table retvals
+---@type table<retvalKey, retval>
 local retvals = {
-  FULL = 'full',
-  ICON = 'icon',
-  NAME = 'name',
-  UNICODE = 'unicode',
+  FULL = 'full', -- Full configuration
+  ICON = 'icon', -- Literal codicon icon
+  NAME = 'name', -- String identifier of codicon
+  UNICODE = 'unicode', -- Unicode value of codicon
 }
 
---- Validate the retval.
--- Validate the return variable type for `get` and `query`. This is a helper
--- function.
---@param retval (string) the return variable to validate.
---@param id_type (string) the type of the identifier used to index the codicons
---  table.
---@return (string) a valid RetvalType
+--- Validate the return value
+---@param retval retval|nil @The return value to validate
+---@param id_type type @The type of the identifier used in the public API
+---@return retval @The validated return value
 local function validate_retval(retval, id_type)
   -- Default to icon
   if not retval then
@@ -40,9 +50,9 @@ local function validate_retval(retval, id_type)
   return retval
 end
 
---- Filter the table of codicons by a regex pattern.
---@param pattern (string) regex pattern.
---@return (table) table of codicon tables.
+--- Filter the table of codicons by a regex pattern
+---@param pattern string @The pattern to filter by
+---@return codiconConfigTable @The filtered table of codicon configurations
 local function filter_by_pattern(pattern)
   local matches = {}
   local regex = vim.regex(pattern)
@@ -56,8 +66,8 @@ local function filter_by_pattern(pattern)
 end
 
 --- Filter the table of codicons by a range of integers.
---@param range (table) table of the min and max value to index with
---@return (table) table of codicon tables.
+---@param range range @The range to filter by
+---@return codiconConfigTable @The filtered table of codicon configurations
 local function filter_by_range(range)
   local matches = {}
   for index = range[1], range[2] do
@@ -67,6 +77,11 @@ local function filter_by_range(range)
   return matches
 end
 
+--- Override the configuration of an existing codicon
+---@param identifier string @A codicon name
+---@param unicode integer @The unicode value of a codicon
+---@param icon string @The literal codicon icon
+---@return nil
 local function override_codicon(identifier, unicode, icon)
   -- Remove the entry at the index given by the unicode value of name.
   -- This is done in case the the icon is given a new unicode value
@@ -85,9 +100,9 @@ local function override_codicon(identifier, unicode, icon)
   }
 end
 
---- Setup the internal state of the codicon library.
--- @param override (table) Map with codicons to override. Codicon name to icon
---   or hexadecimal unicode value.
+--- Setup the internal state of the codicon library
+---@param override codiconUserConfig @Map of codicons to override
+---@return nil
 function M.setup(override)
   if not override then
     return
@@ -109,13 +124,10 @@ function M.setup(override)
   end
 end
 
---- Get a codicon by identifier.
---@param name (string, number) the name or unicode value of the codicon to get.
---@param retval (string) what the returned value should be. Has to be one of
---'table', 'icon', 'name', or 'unicode'.
---@return (nil or match) match is a string if `retval` is 'icon'
---  or 'unicode', or a table if `retval` is 'table'. Nil is returned if no
---  codicon with `name` is found.
+--- Get a codicon by identifier
+---@param identifier codiconConfigIdentifier @The identifier to find codicon by
+---@param retval retval @The return value
+---@return nil | codiconRetval @The found codicon value or nil if not found
 function M.get(identifier, retval)
   -- Validate retval
   retval = validate_retval(retval, type(identifier))
@@ -131,11 +143,10 @@ function M.get(identifier, retval)
   end
 end
 
---- Get a table of codicons matching query.
---@param pattern_range (string, {number, number}) the regex pattern to match against or range of unicode values.
---@param retval (string) what the returned table should contain. Has to be one of
---  'table', 'icon', 'name', or 'unicode'.
---@return (table) map of matches with codicon name to unicode/icon/complete pairs.
+--- Get a table of codicons matching pattern_range
+---@param pattern_range pattern_range @The query parameter
+---@param retval retval @The return value
+---@return codiconRetvalTable @Table of codicon configurations matching the query
 function M.query(pattern_range, retval)
   -- Validate retval
   retval = validate_retval(retval, type(pattern_range))

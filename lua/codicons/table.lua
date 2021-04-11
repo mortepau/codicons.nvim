@@ -1,9 +1,22 @@
 --[[
 Reference for unicode value:
-  https://github.com/microsoft/vscode-codicons/blob/main/dist/codicon.csv
   https://github.com/microsoft/vscode-codicons/blob/main/src/template/mapping.json
 --]]
 
+---@class codiconConfigNamed
+---@field icon string
+---@field name string | string[]
+
+---@class codiconConfigNumbered
+---@field icon string
+---@field unicode integer
+
+---@alias codiconConfigIdentifier string | integer
+---@alias codiconConfig codiconConfigNamed | codiconConfigNumbered
+
+---@alias codiconConfigTable table<codiconConfigIdentifier, codiconConfig>
+
+---@type codiconConfigTable
 local codicons = {
   ['account']                                 = { icon = '', unicode = 0xEB99 },
   ['activate-breakpoints']                    = { icon = '', unicode = 0xEA97 },
@@ -450,7 +463,10 @@ local codicons = {
   ['zoom-out']                                = { icon = '', unicode = 0xEB82 },
 }
 
--- Add indexing by unicode value
+-- Add indexing by unicode
+
+---@param name string
+---@param config codiconConfigNumbered
 for name, config in pairs(vim.deepcopy(codicons)) do
   -- If it has a codicon defined for the unicode value, convert it to a list of names
   if codicons[config.unicode] then
@@ -463,4 +479,5 @@ for name, config in pairs(vim.deepcopy(codicons)) do
   end
 end
 
+---@type codiconConfigTable
 return codicons
