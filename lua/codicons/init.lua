@@ -148,7 +148,7 @@ function M.query(pattern_range, retval)
     matches = filter_by_pattern(pattern_range)
   end
 
-  if retval == RetvalType.table then
+  if retval == RetvalType.full then
     return matches
   else
     return vim.tbl_map(
