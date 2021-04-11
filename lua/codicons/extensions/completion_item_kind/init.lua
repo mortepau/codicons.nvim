@@ -3,10 +3,30 @@ Reference for CompletionItemKind codicons
   https://github.com/microsoft/vscode/blob/main/src/vs/editor/common/modes.ts#L400
 --]]
 
+---@alias completionItemKind table<string|number, string|number>
+
+---@class completionItemKindIndex @Table of indexes for different editors
+---@field public lsp integer @The index used by Neovim LSP
+---@field public vscode integer @The index used by VS Code
+
+---@class completionItemKindConfig @Table of configurations for a CompletionItemKind value
+---@field public index completionItemKindIndex @Table of indexes for Neovim and VS Code
+---@field public icon string @The codicon name
+
+---@alias completionItemKindConfigTable table<string, completionItemKindConfig>
+
+---@class setOptions @Table of options for the set function
+---@field public include_icon boolean @Include the codicon in the CompletionItemKind table
+---@field public include_label boolean @Include the label in the CompletionItemKind table
+---@field public monospaced boolean @Render the codicons as monospaced or double-width
+---@field public override table<string, string|number> @Map of CompletionItemKind label to icon to override
+
+---@type codiconConfigTable
 local codicons = require('codicons')
 
 local M = {}
 
+---@type completionItemKindConfigTable
 M.symbols = {
   Text          = { index = { lsp =  1, vscode = 18 }, icon = 'symbol-key'         }, -- 
   Method        = { index = { lsp =  2, vscode =  0 }, icon = 'symbol-method'      }, -- 
@@ -40,15 +60,9 @@ M.symbols = {
   Issue         = { index = { lsp = 27, vscode = 26 }, icon = 'issues'             }, -- 
 }
 
---- Set `vim.lsp.protocol.CompletionItemKind`.
---@param opts (table) Table with options defining the behaviour.
---@param opts.include_icon (bool) Include codicon icon in the label in
---  `vim.lsp.protocol.CompletionItemKind`. Default: true.
---@param opts.include_label (bool) Include kind label in the label in
---  `vim.lsp.protocol.CompletionItemKind`. Default: true.
---@param opts.monospaced (bool) Render the icons as monospaced and not include
---  an extra space after the icon.
---@param opts.override (table) Table of icons to override.
+--- Set the LSP CompletionItemKind table
+---@param opts setOptions @Table of options
+---@return nil
 function M.set(opts)
   opts = opts or {}
 
@@ -81,9 +95,8 @@ function M.set(opts)
   vim.lsp.protocol.CompletionItemKind = items
 end
 
---- Reset vim.lsp.protocol.CompletionItemKind to its initial state.
--- If `vim.lsp.protocol.CompletionItemKind` has been modified it will be
--- reverted to its initial state.
+--- Reset the LSP CompletionItemKind table to its initial state
+---@return nil
 function M.reset()
   if M.original then
     vim.lsp.protocol.CompletionItemKind = M.original
