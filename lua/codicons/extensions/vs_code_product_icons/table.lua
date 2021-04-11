@@ -4,12 +4,12 @@
 --]]
 
 ---@class vsCodeProductIconConfig @Table of VS Code Product Icon Configuration
----@field name string @Name of the codicon value to use
----@field description string @Description provided by Visual Studio
+---@field public name string @Name of the codicon value to use
+---@field public description string @Description provided by Visual Studio
 
 ---@class vsCodeProductIconConfigExtended : vsCodeProductIconConfig @Extended vsCodeProductIconConfig with information from the codicon library
----@field icon string @The literal codicon icon
----@field unicode integer @The unicode value for the codicon icon
+---@field public icon string @The literal codicon icon
+---@field public unicode integer @The unicode value for the codicon icon
 
 ---@alias vsCodeProductIconConfigTable table<string, vsCodeProductIconConfig>
 
