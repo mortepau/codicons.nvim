@@ -7,12 +7,12 @@ local M = {}
 --@field icon Return only the codicon icon
 --@field name Return only the codicon name
 --@field unicode Return only the codicon unicode hexadecimal value
---@table RetvalType
-local RetvalType = {
-  full = 'full',
-  icon = 'icon',
-  name = 'name',
-  unicode = 'unicode',
+--@table retvals
+local retvals = {
+  FULL = 'full',
+  ICON = 'icon',
+  NAME = 'name',
+  UNICODE = 'unicode',
 }
 
 --- Validate the retval.
@@ -25,16 +25,16 @@ local RetvalType = {
 local function validate_retval(retval, id_type)
   -- Default to icon
   if not retval then
-    return RetvalType.icon
+    return retvals.ICON
   end
 
   -- Assert that retval is valid
-  assert(vim.tbl_contains(vim.tbl_values(RetvalType), retval), '[Codicons.nvim] Invalid retval')
+  assert(vim.tbl_contains(vim.tbl_values(retvals), retval), '[Codicons.nvim] Invalid retval')
 
   -- Assert that the combination of identifier and retval is valid
-  assert(not (retval == RetvalType.name and id_type == 'string'), '[Codicons.nvim] Invalid combination, retval cannot be name while identifier is a string')
-  assert(not (retval == RetvalType.unicode and id_type == 'number'), '[Codicons.nvim] Invalid combination, retval cannot be unicode while identifier is a number')
-  assert(not (retval == RetvalType.unicode and id_type == 'table'), '[Codicons.nvim] Invalid combination, retval cannot be unicode while identifier is a range')
+  assert(not (retval == retvals.NAME and id_type == 'string'), '[Codicons.nvim] Invalid combination, retval cannot be name while identifier is a string')
+  assert(not (retval == retvals.UNICODE and id_type == 'number'), '[Codicons.nvim] Invalid combination, retval cannot be unicode while identifier is a number')
+  assert(not (retval == retvals.UNICODE and id_type == 'table'), '[Codicons.nvim] Invalid combination, retval cannot be unicode while identifier is a range')
 
   -- The retval is valid, so return it
   return retval
@@ -124,7 +124,7 @@ function M.get(identifier, retval)
     return
   end
 
-  if retval == RetvalType.full then
+  if retval == retvals.FULL then
     return codicons[identifier]
   else
     return codicons[identifier][retval]
@@ -148,7 +148,7 @@ function M.query(pattern_range, retval)
     matches = filter_by_pattern(pattern_range)
   end
 
-  if retval == RetvalType.full then
+  if retval == retvals.FULL then
     return matches
   else
     return vim.tbl_map(
