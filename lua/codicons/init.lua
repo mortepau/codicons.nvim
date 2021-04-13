@@ -151,6 +151,9 @@ function M.query(pattern_range, retval)
   -- Validate retval
   retval = validate_retval(retval, type(pattern_range))
 
+  -- Assert the type of pattern_range
+  assert(type(pattern_range) == 'table' or type(pattern_range) == 'string', '[Codicons.nvim] First parameter must either be a range (table) or a pattern (string)')
+
   local matches = {}
   if type(pattern_range) == 'table' then
     assert(#pattern_range == 2, '[Codicons.nvim] Range must be on the form {min, max}')
