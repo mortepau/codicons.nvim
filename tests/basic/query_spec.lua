@@ -64,7 +64,7 @@ describe('query', function()
         [60012] = { 'alert', 'warning' },
         [60013] = { 'search', 'search-save' }
       }
-      local actual = query({0xEA6B, 0xEA6D}, 'name') 
+      local actual = query({0xEA6B, 0xEA6D}, 'name')
       for _, t in pairs(actual) do
         table.sort(t)
       end
@@ -77,7 +77,7 @@ describe('query', function()
         [60012] = { name = { 'alert', 'warning' }, icon = '' },
         [60013] = { name = { 'search', 'search-save' }, icon = '' }
       }
-      local actual = query({0xEA6B, 0xEA6D}, 'full') 
+      local actual = query({0xEA6B, 0xEA6D}, 'full')
       for _, t in pairs(actual) do
         table.sort(t.name)
       end
