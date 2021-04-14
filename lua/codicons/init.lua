@@ -83,21 +83,41 @@ end
 ---@param icon string @The literal codicon icon
 ---@return nil
 local function override_codicon(identifier, unicode, icon)
-  -- Remove the entry at the index given by the unicode value of name.
-  -- This is done in case the the icon is given a new unicode value
-  if codicons[identifier] then
-    codicons[codicons[identifier].unicode] = nil
+  -- Remove identifier from the names identified by the unicode value
+  local current_codicon = codicons[identifier]
+  if current_codicon and codicons[current_codicon.unicode] then
+    local current_unicode = codicons[current_codicon.unicode]
+
+    if type(current_unicode.name) == 'table' then
+      -- Remove the name from the list
+      for index, name in ipairs(current_unicode.name) do
+        if name == identifier then
+          table.remove(codicons[current_codicon.unicode].name, index)
+          break
+        end
+      end
+
+      -- Unpack the name from the list if it is only one entry
+      if #current_unicode.name == 1 then
+        current_unicode.name = current_unicode.name[1]
+      end
+    else
+      -- No more entries for this codicon
+      codicons[current_codicon.unicode] = nil
+    end
+
+    -- Insert a new entry at the identifier
+    codicons[identifier] = { unicode = unicode, icon = icon }
   end
-  -- Create entry by name
-  codicons[identifier] = {
-    unicode = unicode,
-    icon = icon
-  }
-  -- Create entry by unicode value
-  codicons[unicode] = {
-    name = identifier,
-    icon = icon
-  }
+
+  -- Insert the name in the entry for the unicode value
+  if codicons[unicode] then
+    if type(codicons[unicode].name) == 'table' then
+      table.insert(codicons[unicode].name, identifier)
+    else
+      codicons[unicode].name = { codicons[unicode].name, identifier }
+    end
+  end
 end
 
 --- Setup the internal state of the codicon library
@@ -109,17 +129,12 @@ function M.setup(override)
   end
 
   for identifier, value in pairs(override) do
-    if type(identifier) == 'number' then
-      -- Indexing by the unicode value
-      override_codicon(value, identifier, vim.fn.nr2char(identifier))
+    if type(value) == 'number' then
+      -- Value is given as a numerical value
+      override_codicon(identifier, value, vim.fn.nr2char(value))
     else
-      if type(value) == 'number' then
-        -- Value is given as a numerical value
-        override_codicon(identifier, value, vim.fn.nr2char(value))
-      else
-        -- Value is given as the icon itself
-        override_codicon(identifier, vim.fn.char2nr(value), value)
-      end
+      -- Value is given as the icon itself
+      override_codicon(identifier, vim.fn.char2nr(value), value)
     end
   end
 end
