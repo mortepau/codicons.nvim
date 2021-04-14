@@ -55,9 +55,6 @@ codicons.setup({
   -- Or by name to hexadecimal/decimal value
   ['comment'] = 0xEA6B, -- hexadecimal
   ['archive'] = 60056, -- decimal
-  -- Or by hexadecimal/decimal value to name
-  [60056] = 'archive',
-  [0xEA6B] = 'comment',
 })
 ```
 

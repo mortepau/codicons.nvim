@@ -51,8 +51,8 @@ codicons.setup({override})                                  *codicons.setup()*
     codicons to override if the default configuration does not match your
     configuration.
 
-    {override} has to be a table of codicon name to codicon unicode value,
-    codicon name to codicon icon, or codicon unicode to codicon name.
+    {override} has to be a table of codicon name to codicon unicode value or
+    codicon name to codicon icon.
 
     Example:
 >
@@ -63,9 +63,6 @@ codicons.setup({override})                                  *codicons.setup()*
         ['account'] = '',
         -- Map name to unicode value
         ['comment'] = 0xEA6B,
-
-        -- Map unicode value to name
-        [60056] = 'archive'
     })
 <
 
