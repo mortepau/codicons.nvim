@@ -14,7 +14,7 @@ Features                                                   |codicons-features|
 Extensions                                               |codicons-extensions|
     API                                              |codicons-extensions-api|
     CompletionItemKind                         |codicons-completion_item_kind|
-    VsCodeIcons                                       |codicons-vs_code_icons|
+    VsCodeProductIcons                        |codicons-vs_code_product_icons|
 License                                                     |codicons-license|
 Bugs                                                           |codicons-bugs|
 Contributing                                           |codicons-contributing|
@@ -76,11 +76,11 @@ codicons.get({identifier}, {retval})                         *codicons.get()*
     returned.
 
     {identifier} can be a string or a numerical value, so both `'account'`
-    and `0xEB99`will result in the same codicon.
+    and `0xEB99` will result in the same codicon.
 
     {retval} has to be one of the following values:
         icon: Return the codicon icon
-        name: Return the codicon name, only works for numerical {identfier}.
+        name: Return the codicon name, only works for numerical {identifier}.
               Raises an error if used with a string {identifier}.
         unicode: Return the codicon unicode value, only works for string
                  {identifier}. Raises an error if used with numerical
@@ -187,7 +187,7 @@ codicons.extensions.available()              *codicons.extensions.available()*
     local available_exts = extensions.available()
     -- {
     --   CompletionItemKind = 'codicons.extensions.completion_item_kind',
-    --   VsCodeIcons = 'codicons.extension.vs_code_icons'
+    --   VsCodeProductIconsIcons = 'codicons.extension.vs_code_product_icons'
     -- }
 
     -- Load the CompletionItemKind extension
@@ -264,17 +264,102 @@ completion_item_kind.reset()           *codicons-completion_item_kind-reset()*
 <
 
 ------------------------------------------------------------------------------
-VsCodeIcons                                           *codicons-vs_code_icons*
+VsCodeProductIcons                            *codicons-vs_code_product_icons*
 
-    TODO
+An extension providing the possibility to interact with codicons using the
+names provided in the VS Code API.
 
-FEATURES                                     *codicons-vs_code_icons-features*
+FEATURES                             *codicons-vs_code_product_icons-features*
 
-    TODO
+* Get a codicon based on the value defined in VS Code API's.
+* Similar functionality as the base plugin, with `get` and `query`.
 
-API                                               *codicons-vs_code_icons-api*
+API                                       *codicons-vs_code_product_icons-api*
 
-    TODO
+vs_code_product_icons.get({identifier}, {retval})
+                                        *codicons-vs_code_product_icons-get()*
+                                        *codicons-vs_code_product_icons.get()*
+
+    Get a single VS Code Product Icon by {identifier}, where {identifier} is
+    a string. The function will return a value based on {retval}. If the
+    {identifier} doesn't match any existing codicon, nil is returned.
+
+    {identifier} is a string matching a VS Code Product Icon as defined in the
+    VS Code API.
+
+    {retval} has to be one of the following values:
+        icon: Return the codicon icon
+        name: Return the codicon name, only works for numerical {identifier}.
+              Raises an error if used with a string {identifier}.
+        unicode: Return the codicon unicode value, only works for string
+                 {identifier}. Raises an error if used with numerical
+                 {identifier}.
+        full: Return the full codicon configuration.
+        description: Return the description as defined in the VS Code API.
+    {retval} defaults to icon.
+
+    Example:
+>
+    local producticons = require('codicons.extensions.vs_code_product_icons')
+
+    local icon = producticons.get('accounts-view-bar-icon') -- ''
+    local desc = producticons.get('breakpoints-activate', 'description')
+        -- "Icon for the activate action in the breakpoints view."
+<
+
+vs_code_product_icons.query({pattern}, {retval})
+                                      *codicons-vs_code_product_icons-query()*
+                                      *codicons-vs_code_product_icons.query()*
+
+    Get all product icons matching {pattern} and returns values based on
+    {retval}. If {pattern} doesn't match any existing product icons, an empty
+    table is returned.
+
+    {pattern} must be a string representing a regex pattern that vim
+    recognises.
+
+    {retval} has to be one of the following values:
+        icon: Return the product icon icon.
+        name: Return the product icon name.
+        unicode: Return the unicode value.
+        description: Return the description as provided by VS Code.
+        full: Return the full product icon configuration.
+    {retval} defaults to icon.
+
+    Example:
+>
+    local producticons = require('codicons.extensions.vs_code_product_icons')
+
+    -- Query for all product icons with '^folding' at the start of the name
+    producticons.query('^folding')
+    -- {
+    --   ['folding-collapsed'] = '',
+    --   ['folding-expanded'] = ''
+    -- }
+
+    -- Accepts the same retval's as get
+    producticons.query('^comment', 'unicode')
+    -- {
+    --   ['folding-collapsed'] = '60086',
+    --   ['folding-expanded'] = '60084'
+    -- }
+
+    producticons.query('^callhierarchy', 'full')
+    -- {
+    --     ["callhierarchy-incoming"] = {
+    --         description = "Icon for incoming calls in the call hierarchy view.",
+    --         icon = "",
+    --         name = "call-incoming",
+    --         unicode = 60306
+    --     },
+    --     ["callhierarchy-outgoing"] = {
+    --         description = "Icon for outgoing calls in the call hierarchy view.",
+    --         icon = "",
+    --         name = "call-outgoing",
+    --         unicode = 60307
+    --     }
+    -- }
+<
 
 ==============================================================================
 LICENSE                                                     *codicons-license*
