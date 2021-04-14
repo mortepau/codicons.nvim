@@ -21,7 +21,9 @@ describe('query', function()
         ['comment-add'] = '',
         ['comment-discussion'] = ''
       }
-      eq(expected, query('comment'))
+      local actual = query('comment')
+      table.sort(actual)
+      eq(expected, actual)
     end)
 
     it('partially matching, retval = "unicode"', function()
@@ -30,7 +32,9 @@ describe('query', function()
         ['comment-add'] = 60011,
         ['comment-discussion'] = 60103
       }
-      eq(expected, query('comment', 'unicode'))
+      local actual = query('comment', 'unicode')
+      table.sort(actual)
+      eq(expected, actual)
     end)
 
     it('partially matching, retval = "full"', function()
@@ -39,7 +43,9 @@ describe('query', function()
         ['comment-add'] = { unicode = 60011, icon = '' },
         ['comment-discussion'] = { unicode = 60103, icon = '' }
       }
-      eq(expected, query('comment', 'full'))
+      local actual = query('comment', 'full')
+      table.sort(actual)
+      eq(expected, actual)
     end)
   end)
 
@@ -55,19 +61,27 @@ describe('query', function()
     it('partially matching, retval = "unicode"', function()
       local expected = {
         [60011] = { 'comment', 'comment-add' },
-        [60012] = { 'warning', 'alert' },
+        [60012] = { 'alert', 'warning' },
         [60013] = { 'search', 'search-save' }
       }
-      eq(expected, query({0xEA6B, 0xEA6D}, 'name'))
+      local actual = query({0xEA6B, 0xEA6D}, 'name') 
+      for _, t in pairs(actual) do
+        table.sort(t)
+      end
+      eq(expected, actual)
     end)
 
     it('partially matching, retval = "full"', function()
       local expected = {
         [60011] = { name = { 'comment', 'comment-add' }, icon = '' },
-        [60012] = { name = { 'warning', 'alert' }, icon = '' },
+        [60012] = { name = { 'alert', 'warning' }, icon = '' },
         [60013] = { name = { 'search', 'search-save' }, icon = '' }
       }
-      eq(expected, query({0xEA6B, 0xEA6D}, 'full'))
+      local actual = query({0xEA6B, 0xEA6D}, 'full') 
+      for _, t in pairs(actual) do
+        table.sort(t.name)
+      end
+      eq(expected, actual)
     end)
   end)
 

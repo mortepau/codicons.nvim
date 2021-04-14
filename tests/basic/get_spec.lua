@@ -1,29 +1,6 @@
 local eq = assert.are.same
 local errors = assert.has_error
 
-local function unordered_list_are_same(_, arguments)
-  local expected = arguments[1]
-  local passed = arguments[2]
-  if #expected == #passed then
-    for _, evalue in ipairs(expected) do
-      local equal = false
-      for _, pvalue in ipairs(passed) do
-        if evalue == pvalue then equal = true end
-      end
-      if not equal then return false end
-    end
-    return true
-  end
-  return false
-end
-
-local say = require('say')
-say:set_namespace('en')
-say:set('assertion.ul.positive', 'Expected property %s in:\n%s')
-say:set('assertion.ul.negative', 'Expected property %s to not be in:\n%s')
-assert:register('assertion', 'ul', unordered_list_are_same, 'assertion.ul.positive', 'assertion.ul.negative')
-local ul_eq = assert.ul
-
 describe('get', function()
   local get = require('codicons').get
 
@@ -61,11 +38,15 @@ describe('get', function()
 
   describe('two arguments, retval = "name"', function()
     it('uses hexadecimal unicode value, non-unique value', function()
-      ul_eq({ 'comment', 'comment-add' }, get(0xEA6B, 'name'))
+      local actual = get(0xEA6B, 'name')
+      table.sort(actual)
+      eq({ 'comment', 'comment-add' }, actual)
     end)
 
     it('uses decimal unicode value, non-unique value', function()
-      ul_eq({ 'comment', 'comment-add' }, get(60011, 'name'))
+      local actual = get(60011, 'name')
+      table.sort(actual)
+      eq({ 'comment', 'comment-add' }, actual)
     end)
 
     it('uses hexadecimal unicode value, unique value', function()
@@ -97,11 +78,15 @@ describe('get', function()
     end)
 
     it('uses hexadecimal unicode value, non-unique value', function()
-      ul_eq({ icon = '', name = { 'comment', 'comment-add' } }, get(0xEA6B, 'full'))
+      local actual = get(0xEA6B, 'full')
+      table.sort(actual)
+      eq({ icon = '', name = { 'comment', 'comment-add' } }, actual)
     end)
 
     it('uses decimal unicode value, non-unique value', function()
-      ul_eq({ icon = '', name = { 'comment', 'comment-add' } }, get(60011, 'full'))
+      local actual = get(60011, 'full')
+      table.sort(actual)
+      eq({ icon = '', name = { 'comment', 'comment-add' } }, actual)
     end)
   end)
 
