@@ -216,8 +216,9 @@ nerd-fonts
 
 ## Todo
 
-- [ ] Document built-in extensions
-- [ ] Add tests
+- [ ] Improve extension API
+- [x] Document built-in extensions
+- [x] Add tests
 - [x] Add documentation for vim, `doc/codicons.txt`
 - [x] Use `codicons.table` instead of hardcoded values in
     `codicons.completion_item_kind`
