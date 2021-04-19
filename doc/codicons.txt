@@ -383,6 +383,11 @@ https://github.com/mortepau/codicons.nvim/pulls/
 ==============================================================================
 CHANGELOG                                                 *codicons-changelog*
 
+v0.3.0
+    * Change to EmmyLua documentation style
+    * Add VsCodeProductIcons extension
+    * Add tests for base plugin
+    * Add tests for existing extensions
 v0.2.0
     * Add more codicons
     * Add table of names for non-unique unicode values
