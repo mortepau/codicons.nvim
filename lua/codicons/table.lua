@@ -417,6 +417,7 @@ local codicons = {
   ['terminal-linux']                          = { icon = '', unicode = 0xEBC6 },
   ['terminal-powershell']                     = { icon = '', unicode = 0xEBC7 },
   ['terminal-tmux']                           = { icon = '', unicode = 0xEBC8 },
+  ['terminal-ubuntu']                         = { icon = '', unicode = 0xEBC9 },
   ['text-size']                               = { icon = '', unicode = 0xEB69 },
   ['three-bars']                              = { icon = '', unicode = 0xEB6A },
   ['thumbsdown']                              = { icon = '', unicode = 0xEB6B },
