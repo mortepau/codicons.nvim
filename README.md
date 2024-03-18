@@ -187,8 +187,8 @@ repository or download the necessary files and do as explained
 2. Download `devicons.ttf` and `original-source.otf` from
    [ryanoasis/nerd-fonts](https://github.com/ryanoasis/nerd-fonts)
 3. (Optional) Download some of the other fonts located in `src/glyphs`
-4. Download `codicons.ttf` from
-   [microsoft/vscode-codicons](https://github.com/microsoft/vscode-codicons/blob/main/dist/codicon.ttf)
+4. Download `codicons.ttf` artifact from any of the "Codicons build" runs at
+   [microsoft/vscode-codicons](https://github.com/microsoft/vscode-codicons/actions/workflows/build.yml?query=is%3Asuccess+branch%3Amain)
 5. Copy/move `codicons.ttf` to `src/glyphs`
 
 Repository structure
