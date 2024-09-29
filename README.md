@@ -217,6 +217,7 @@ nerd-fonts
 ## Todo
 
 - [ ] Improve extension API
+- [ ] Document nvim-cmp completion extension
 - [x] Document built-in extensions
 - [x] Add tests
 - [x] Add documentation for vim, `doc/codicons.txt`
