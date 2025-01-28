@@ -138,8 +138,8 @@ function M.setup(override)
     end
   end
 
-  if type(vim.g.codicons_extensions_cmp_disable) ~= "boolean" then
-    vim.g.codicons_extensions_cmp_disable = false
+  if type(vim.g.codicons_extension_cmp_disable) ~= "boolean" then
+    vim.g.codicons_extension_cmp_disable = false
   end
 end
 
