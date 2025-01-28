@@ -137,6 +137,10 @@ function M.setup(override)
       override_codicon(identifier, vim.fn.char2nr(value), value)
     end
   end
+
+  if type(vim.g.codicons_extensions_cmp_disable) ~= "boolean" then
+    vim.g.codicons_extensions_cmp_disable = false
+  end
 end
 
 --- Get a codicon by identifier
